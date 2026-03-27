@@ -85,7 +85,12 @@ export function Contact({ profile }: ContactProps) {
                 {profile.phone && (
                   <TerminalLine prompt="→">
                     <span className="text-[var(--terminal-amber)]">{t.contact.phone}:</span>{" "}
-                    <span className="text-gray-300">{profile.phone}</span>
+                    <a
+                      href={`tel:${profile.phone.replace(/\s/g, "")}`}
+                      className="text-[var(--terminal-green)] hover:underline"
+                    >
+                      {profile.phone}
+                    </a>
                   </TerminalLine>
                 )}
                 <TerminalLine prompt="→">
