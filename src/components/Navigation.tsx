@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { navLinks } from "@/lib/data";
+import { LogoBracket } from "./Logo";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,9 +33,9 @@ export function Navigation() {
         <div className="flex items-center justify-between h-16">
           <a
             href="#"
-            className="text-[var(--terminal-green)] font-bold text-lg hover:text-[var(--terminal-amber)] transition-colors"
+            className="hover:opacity-80 transition-opacity"
           >
-            {"<minh-hieu />"}
+            <LogoBracket />
           </a>
 
           {/* Desktop Navigation */}
