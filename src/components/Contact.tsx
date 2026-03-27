@@ -11,6 +11,7 @@ import { Button } from "./ui/Button";
 import { Input, Textarea } from "./ui/Input";
 import { DownloadResume } from "./DownloadResume";
 import { Profile } from "@/types";
+import { useLanguage } from "@/lib/i18n";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -26,6 +27,7 @@ interface ContactProps {
 }
 
 export function Contact({ profile }: ContactProps) {
+  const { t } = useLanguage();
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
 
   const {
@@ -58,7 +60,7 @@ export function Contact({ profile }: ContactProps) {
         className="max-w-4xl mx-auto"
       >
         <h2 className="text-2xl md:text-3xl font-bold text-[var(--terminal-green)] mb-8">
-          <span className="text-[var(--terminal-amber)]">#</span> Contact
+          <span className="text-[var(--terminal-amber)]">#</span> {t.contact.title}
         </h2>
 
         <Terminal title="contact_form.sh">
@@ -66,29 +68,28 @@ export function Contact({ profile }: ContactProps) {
             <div>
               <TerminalLine prompt="$">
                 <span className="text-[var(--terminal-cyan)]">echo</span>{" "}
-                <span className="text-gray-400">"Let's connect!"</span>
+                <span className="text-gray-400">"{t.contact.letsConnect}"</span>
               </TerminalLine>
 
               <p className="text-gray-300 text-sm mt-4 mb-6 leading-relaxed">
-                I'm always interested in hearing about new projects and opportunities.
-                Feel free to reach out through the form or via email.
+                {t.contact.description}
               </p>
 
               <div className="space-y-3">
                 <TerminalLine prompt="→">
-                  <span className="text-[var(--terminal-amber)]">Email:</span>{" "}
+                  <span className="text-[var(--terminal-amber)]">{t.contact.email}:</span>{" "}
                   <a href={`mailto:${profile.email}`} className="text-[var(--terminal-green)] hover:underline">
                     {profile.email}
                   </a>
                 </TerminalLine>
                 {profile.phone && (
                   <TerminalLine prompt="→">
-                    <span className="text-[var(--terminal-amber)]">Phone:</span>{" "}
+                    <span className="text-[var(--terminal-amber)]">{t.contact.phone}:</span>{" "}
                     <span className="text-gray-300">{profile.phone}</span>
                   </TerminalLine>
                 )}
                 <TerminalLine prompt="→">
-                  <span className="text-[var(--terminal-amber)]">Location:</span>{" "}
+                  <span className="text-[var(--terminal-amber)]">{t.contact.location}:</span>{" "}
                   <span className="text-gray-300">{profile.location}</span>
                 </TerminalLine>
               </div>
@@ -100,30 +101,30 @@ export function Contact({ profile }: ContactProps) {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <Input
-                label="Name"
-                placeholder="Your name"
+                label={t.contact.form.name}
+                placeholder={t.contact.form.namePlaceholder}
                 error={errors.name?.message}
                 {...register("name")}
               />
 
               <Input
-                label="Email"
+                label={t.contact.form.email}
                 type="email"
-                placeholder="your@email.com"
+                placeholder={t.contact.form.emailPlaceholder}
                 error={errors.email?.message}
                 {...register("email")}
               />
 
               <Input
-                label="Subject"
-                placeholder="Project inquiry"
+                label={t.contact.form.subject}
+                placeholder={t.contact.form.subjectPlaceholder}
                 error={errors.subject?.message}
                 {...register("subject")}
               />
 
               <Textarea
-                label="Message"
-                placeholder="Hello, I'd like to discuss..."
+                label={t.contact.form.message}
+                placeholder={t.contact.form.messagePlaceholder}
                 rows={4}
                 error={errors.message?.message}
                 {...register("message")}
@@ -131,7 +132,7 @@ export function Contact({ profile }: ContactProps) {
 
               <Button type="submit" disabled={isSubmitting} className="w-full">
                 <Send className="w-4 h-4" />
-                {isSubmitting ? "Sending..." : "Send Message"}
+                {isSubmitting ? t.contact.form.sending : t.contact.form.send}
               </Button>
 
               {status === "success" && (
@@ -141,7 +142,7 @@ export function Contact({ profile }: ContactProps) {
                   className="flex items-center gap-2 text-[var(--terminal-green)] text-sm"
                 >
                   <CheckCircle className="w-4 h-4" />
-                  Message sent successfully!
+                  {t.contact.form.success}
                 </motion.div>
               )}
 
@@ -152,7 +153,7 @@ export function Contact({ profile }: ContactProps) {
                   className="flex items-center gap-2 text-[var(--terminal-red)] text-sm"
                 >
                   <AlertCircle className="w-4 h-4" />
-                  Failed to send message. Please try again.
+                  {t.contact.form.error}
                 </motion.div>
               )}
             </form>
@@ -169,7 +170,7 @@ export function Contact({ profile }: ContactProps) {
           <TerminalLine prompt="$">
             <span className="text-[var(--terminal-cyan)]">exit</span> 0
           </TerminalLine>
-          <p className="mt-2">© {new Date().getFullYear()} {">"} Built with Next.js & Tailwind CSS</p>
+          <p className="mt-2">© {new Date().getFullYear()} {">"} {t.footer.built}</p>
         </motion.div>
       </motion.div>
     </section>

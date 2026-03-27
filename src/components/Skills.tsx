@@ -3,24 +3,17 @@
 import { motion } from "framer-motion";
 import { Terminal, TerminalLine } from "./Terminal";
 import { Skill } from "@/types";
+import { useLanguage } from "@/lib/i18n";
 
 interface SkillsProps {
   skills: Skill[];
 }
 
-const categoryLabels: Record<string, string> = {
-  language: "Programming Languages",
-  framework: "Frameworks & Tools",
-  ai: "AI & Machine Learning",
-  blockchain: "Blockchain & Web3",
-  database: "Databases & Messaging",
-  devops: "DevOps & Monitoring",
-  cloud: "Cloud & Infrastructure",
-};
-
 const categoryOrder = ["language", "ai", "blockchain", "framework", "database", "devops", "cloud"];
 
 export function Skills({ skills }: SkillsProps) {
+  const { t } = useLanguage();
+
   const groupedSkills = skills.reduce((acc, skill) => {
     if (!acc[skill.category]) {
       acc[skill.category] = [];
@@ -39,7 +32,7 @@ export function Skills({ skills }: SkillsProps) {
         className="max-w-4xl mx-auto"
       >
         <h2 className="text-2xl md:text-3xl font-bold text-[var(--terminal-green)] mb-8">
-          <span className="text-[var(--terminal-amber)]">#</span> Skills & Tech Stack
+          <span className="text-[var(--terminal-amber)]">#</span> {t.skills.title}
         </h2>
 
         <Terminal title="skills.py">
@@ -52,7 +45,7 @@ export function Skills({ skills }: SkillsProps) {
                 <div key={category}>
                   <TerminalLine prompt=">>>">
                     <span className="text-[var(--terminal-amber)]">
-                      {categoryLabels[category]}
+                      {t.skills.categories[category as keyof typeof t.skills.categories]}
                     </span>
                     <span className="text-gray-400">.load()</span>
                   </TerminalLine>

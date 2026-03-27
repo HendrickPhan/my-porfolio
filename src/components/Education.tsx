@@ -3,12 +3,15 @@
 import { motion } from "framer-motion";
 import { Terminal, TerminalLine } from "./Terminal";
 import { Education as EducationType } from "@/types";
+import { useLanguage } from "@/lib/i18n";
 
 interface EducationProps {
   education: EducationType[];
 }
 
 export function Education({ education }: EducationProps) {
+  const { t } = useLanguage();
+
   return (
     <section id="education" className="py-20 px-4 relative z-10">
       <motion.div
@@ -19,7 +22,7 @@ export function Education({ education }: EducationProps) {
         className="max-w-4xl mx-auto"
       >
         <h2 className="text-2xl md:text-3xl font-bold text-[var(--terminal-green)] mb-8">
-          <span className="text-[var(--terminal-amber)]">#</span> Education
+          <span className="text-[var(--terminal-amber)]">#</span> {t.education.title}
         </h2>
 
         <Terminal title="education.log">
@@ -52,7 +55,7 @@ export function Education({ education }: EducationProps) {
 
                   {edu.thesis && (
                     <div className="mt-2 text-sm">
-                      <span className="text-[var(--terminal-amber)]">Thesis:</span>{" "}
+                      <span className="text-[var(--terminal-amber)]">{t.education.thesis}:</span>{" "}
                       <span className="text-gray-300">{edu.thesis}</span>
                     </div>
                   )}

@@ -35,6 +35,13 @@ export interface Skill {
   category: "language" | "framework" | "tool" | "blockchain" | "ai" | "database" | "devops" | "cloud";
 }
 
+export interface Publication {
+  title: string;
+  authors: string;
+  year: string;
+  description: string;
+}
+
 export interface Profile {
   name: string;
   title: string;
@@ -47,6 +54,6 @@ export interface Profile {
   education: Education[];
   projects: Project[];
   skills: Skill[];
-  publications?: { title: string; authors: string; year: string; description: string }[];
+  publications?: Publication[];
   certificates?: string[];
 }

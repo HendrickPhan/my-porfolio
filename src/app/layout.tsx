@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { LanguageProvider } from "@/lib/i18n";
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains",
@@ -36,7 +37,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${jetbrainsMono.variable} antialiased`}>
-      <body className="min-h-screen">{children}</body>
+      <body className="min-h-screen">
+        <LanguageProvider>{children}</LanguageProvider>
+      </body>
     </html>
   );
 }

@@ -3,12 +3,23 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { navLinks } from "@/lib/data";
+import { useLanguage } from "@/lib/i18n";
 import { LogoBracket } from "./Logo";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { t } = useLanguage();
+
+  const navLinks = [
+    { name: t.nav.about, href: "#about" },
+    { name: t.nav.experience, href: "#experience" },
+    { name: t.nav.skills, href: "#skills" },
+    { name: t.nav.projects, href: "#projects" },
+    { name: t.nav.education, href: "#education" },
+    { name: t.nav.contact, href: "#contact" },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,15 +60,19 @@ export function Navigation() {
                 {link.name}
               </a>
             ))}
+            <LanguageSwitcher />
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 text-[var(--terminal-green)] hover:text-[var(--terminal-amber)] transition-colors"
-          >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          <div className="md:hidden flex items-center gap-2">
+            <LanguageSwitcher />
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 text-[var(--terminal-green)] hover:text-[var(--terminal-amber)] transition-colors"
+            >
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
