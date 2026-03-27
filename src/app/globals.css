@@ -1,26 +1,323 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a0a;
+  --foreground: #00ff00;
+  --accent: #ffb000;
+  --muted: #1a1a2e;
+  --border: #16213e;
+  --card: #0f0f23;
+  --terminal-green: #00ff00;
+  --terminal-amber: #ffb000;
+  --terminal-cyan: #00ffff;
+  --terminal-red: #ff0040;
+  --scanline: rgba(0, 255, 0, 0.03);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --font-mono: var(--font-jetbrains);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scanline effect */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    var(--scanline) 0px,
+    var(--scanline) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  z-index: 9999;
+}
+
+/* Selection */
+::selection {
+  background: var(--terminal-green);
+  color: var(--background);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--terminal-green);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--terminal-amber);
+}
+
+/* Animations */
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink {
+  0%, 50% {
+    border-color: var(--terminal-green);
+  }
+  51%, 100% {
+    border-color: transparent;
+  }
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+@keyframes flicker {
+  0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+    opacity: 1;
+  }
+  20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-green {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--terminal-green);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--terminal-green), 0 0 30px var(--terminal-green);
+  }
+}
+
+@keyframes matrix-rain {
+  0% {
+    transform: translateY(-100%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+/* Utility classes */
+.animate-typing {
+  animation: typing 3s steps(40, end), blink 0.75s step-end infinite;
+}
+
+.animate-glitch {
+  animation: glitch 0.3s infinite;
+}
+
+.animate-flicker {
+  animation: flicker 3s infinite;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-pulse-green {
+  animation: pulse-green 2s infinite;
+}
+
+/* Terminal styles */
+.terminal {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.terminal-header {
+  background: var(--muted);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.terminal-dot.red {
+  background: #ff5f56;
+}
+
+.terminal-dot.yellow {
+  background: #ffbd2e;
+}
+
+.terminal-dot.green {
+  background: #27ca40;
+}
+
+.terminal-body {
+  padding: 16px;
+}
+
+/* Code block style */
+.code-block {
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 12px;
+  font-family: var(--font-mono), monospace;
+  position: relative;
+}
+
+.code-block::before {
+  content: "$ ";
+  color: var(--terminal-green);
+}
+
+/* Glitch text effect */
+.glitch {
+  position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch::before {
+  left: 2px;
+  text-shadow: -2px 0 var(--terminal-red);
+  clip: rect(24px, 550px, 90px, 0);
+  animation: glitch 2s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+  left: -2px;
+  text-shadow: -2px 0 var(--terminal-cyan);
+  clip: rect(85px, 550px, 140px, 0);
+  animation: glitch 2s infinite linear alternate-reverse;
+}
+
+/* Link styles */
+a {
+  color: var(--terminal-green);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  color: var(--terminal-amber);
+  text-shadow: 0 0 10px var(--terminal-amber);
+}
+
+/* Button base */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 1px solid var(--terminal-green);
+  background: transparent;
+  color: var(--terminal-green);
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  background: var(--terminal-green);
+  color: var(--background);
+  box-shadow: 0 0 20px var(--terminal-green);
+}
+
+/* Input styles */
+input, textarea {
+  background: var(--muted);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  padding: 10px 14px;
+  font-family: inherit;
+  font-size: 14px;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--terminal-green);
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+}
+
+input::placeholder, textarea::placeholder {
+  color: #4a4a6a;
 }
